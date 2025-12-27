@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USMB IoT Manager</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="logo">
+        <h2>USMB IoT Manager</h2>
+        <div class="tenant-select">
+          <span class="tenant-select-title">Tenant</span>
+          <select name="tenant" id="tenant">
+            <option value="" disabled selected>Select a tenant...</option>
+          </select>
+        </div>
+        <div class="application-select">
+          <span class="tenant-select-title">Applications</span>
+          <select name="application" id="application">
+            <option value="" disabled selected>Select an application...</option>
+          </select>
+        </div>
+      </div>
+      <div class="nav-links nav-settings">
+        <li class="nav-settings-section">
+          <a href="#settings" class="active">Settings</a>
+        </li>
+      </div>
+      <ul class="nav-links">
+        <li class="nav-section">
+          <span class="nav-section-title">Provisioning</span>
+          <ul class="submenu">
+            <li><a href="#list-device">List devices</a></li>
+            <li><a href="#add-device">Import devices</a></li>
+            <li><a href="#delete-device">Delete devices</a></li>
+          </ul>
+        </li>
+        <li class="nav-section">
+          <span class="nav-section-title">Control</span>
+          <ul class="submenu">
+            <li><a href="#micropelt-mlr003">Micropelt-mlr003</a></li>
+            <!-- li><a href="#dragino-lht65">Dragino-lht65</a></li>    -->
+            <!-- <li><a href="#mclimate-vicki">MClimate-vicki</a></li> -->
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <main class="main-content">
+      <div class="content">
+        <h1>Settings</h1>
+        <div class="page-sections">
+
+          <!-- Settings Section -->
+          <section class="settings-section">
+            <h2>Settings</h2>
+            <form class="settings-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="network-server">Network Server</label>
+                  <!--input type="text" id="network-server" name="network-server" placeholder="Network server URL"
+                    value="server1.univ-lorawan.fr" /-->
+                  <input type="text" id="network-server" name="network-server" placeholder="Network server URL" />
+                </div>
+                <div class="form-group">
+                  <label for="network-server-port">Server Port</label>
+                  <!--input type="number" id="network-server-port" name="network-server-port" min="0" max="65535" step="1"
+                    placeholder="Server Port" value="8080" /-->
+                  <input type="number" id="network-server-port" name="network-server-port" min="0" max="65535" step="1"
+                    placeholder="Server Port" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="tenant-key-checkbox">I have a tenant API key ?</label>
+                  <div class="checkbox">
+                    <input type="checkbox" id="tenant-key-checkbox" name="tenant-key-checkbox" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="tenant-id" id="tenant-id-label" style="display: none;">Tenant Id</label>
+                  <input type="text" id="tenant-id" name="tenant-id" style="display: none;" placeholder="Tenant ID" />
+                </div>
+              </div>
+              <div class="form-row">
+              <div class="form-group">
+                  <label for="api-key">API Key</label>
+                  <!--input type="password" id="api-key" name="api-key" placeholder="API Key"
+                    value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImUwMWJjMWUzLWMzMTYtNDE5NC1hZTM5LWRlY2FiNzBlZTMxNCIsInR5cCI6ImtleSJ9.sq8Br0UTEdw8b5UFYeOr_BbYswt72mva0HsvNAU3jAA" /-->
+                     <input type="password" id="api-key" name="api-key" placeholder="API Key"/>
+                </div>
+              </div>
+
+              <div class="buttons-container">
+                <button type="submit" class="save-button" id="test-connection" style="display: none;">Test connection</button>
+                <button type="submit" class="save-button" id="save-credentials">Save & Test Connection</button>
+              </div>
+              <div class="settings-message" style="margin-left: 1rem"></div>
+            </form>
+          </section>
+
+          <!-- Add Device Section -->
+          <section class="add-device-section" style="display: none">
+            <h2>Device credentials</h2>
+            <form class="add-device-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="device-name">Device Name</label>
+                  <input type="text" id="device-name" name="device-name" placeholder="Device Name" />
+                </div>
+                <div class="form-group">
+                  <label for="device-profile">Device Profile</label>
+                  <select name="device-profile" id="device-profile"></select>
+                </div>
+              </div>
+              <div class="form-row credentials-row">
+                <div class="form-group">
+                  <label for="device-eui">Device EUI</label>
+                  <input type="text" id="device-eui" name="device-eui" pattern="[A-Fa-f0-9]{16}"
+                    title="Entrez 16 caractères hexadécimaux" placeholder="Device EUI" />
+                </div>
+                <div class="form-group">
+                  <label for="device-app-eui">Device AppEUI</label>
+                  <input type="text" id="device-app-eui" name="device-app-eui" pattern="[A-Fa-f0-9]{16}"
+                    placeholder="Device AppEUI" title="Entrez 16 caractères hexadécimaux" />
+                </div>
+                <div class="form-group">
+                  <label for="device-app-key">Device App Key</label>
+                  <input type="text" id="device-app-key" name="device-app-key" pattern="[A-Fa-f0-9]{32}"
+                    placeholder="Device App Key" title="Entrez 32 caractères hexadécimaux" />
+                </div>
+              </div>
+              <div class="buttons-container">
+                <button type="button" class="save-button" id="add-tag-button">Add tag</button>
+                <button type="submit" class="save-button">Add Device</button>
+              </div>
+              <div class="tags-container">
+
+              </div>
+            </form>
+          </section>
+
+          <!-- Add Device From CSV Section -->
+          <section class="add-device-from-csv-section" style="display: none;">
+            <h2>Import From CSV File</h2>
+            <form class="add-device-from-csv-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <div class="drop-zone" id="drop-zone">
+                    <input type="file" id="csv-file" name="csv" accept=".csv" class="file-input" />
+                    <div class="drop-zone-text">
+                      Drag and drop your CSV file here<br>
+                      or click to select a file
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="save-button">Import Devices</button>
+            </form>
+          </section>
+
+          <!-- Action Section -->
+          <section class="action-section" style="display: none;">
+            <div class="action-header">
+              <h2>Actions</h2>
+              <select id="action-type-select">
+                <option value="emergency">Emmergency Setpoint</option>
+                <option value="off">Turn off MLR003</option>
+              </select>
+            </div>
+            <form class="action-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="emmergency-temp" id="emergency-label" style="color: red;">Emmergency Temperature</label>
+                  <input type="number" id="emmergency-temp" name="emmergency-temp" min="0" max="50" step="0.5"
+                    placeholder="Emmergency Temperature" value="19" style="text-align: center;" />
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <!-- Device Section -->
+          <section class="device-section" style="display: none;">
+            <div class="device-header">
+              <h2>Devices</h2>
+              <div class="device-search">
+                <input type="text" id="device-search-input" placeholder="Search devices..." />
+              </div>
+              <div class="buttons">
+                <button class="refresh-button" title="Refresh devices">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6"></path>
+                    <path d="M1 20v-6h6"></path>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                  </svg>
+                  Refresh
+                </button>
+                <button id="send-confirmed-action-btn" class="send-button" type="button"
+                  title="Send action to selected devices"> Send </button>
+                <button id="delete-device-btn" class="delete-button" style="display: none;" type="button"
+                  title="Delete selected devices"> Delete </button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="devices-table">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="select-all-devices" title="Select all devices" />
+                    </th>
+                    <th data-column="name">Devices</th>
+                    <th class="sortable" data-column="site">
+                      Site
+                      <span class="sort-icon">↕</span>
+                    </th>
+                    <th class="sortable" data-column="building">
+                      Building
+                      <span class="sort-icon">↕</span>
+                    </th>
+                    <th class="sortable" data-column="room">
+                      Room
+                      <span class="sort-icon">↕</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Table content will be populated via API -->
+                  <tr>
+                    <td colspan="5" class="no-data">No devices found for this application.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="clientCredentials.js"></script>
+  <script src="clientDeviceManager.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+{
+  "name": "myiotplatform",
+  "version": "1.0.0",
+  "main": "elec.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js --ignore credentials.json",
+    "electron": "electron .",
+    "electron-dev": "NODE_ENV=development electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "keywords": [],
+  "author": "Sylvain MONTAGNY",
+  "license": "ISC",
+  "description": "A web-based application to manage LoRaWAN devices with a ChirpStack LNS.",
+  "dependencies": {
+    "@chirpstack/chirpstack-api": "^4.15.0",
+    "@grpc/grpc-js": "^1.14.1",
+    "axios": "^1.13.2",
+    "express": "^5.1.0",
+    "papaparse": "^5.5.3"
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
+    "nodemon": "^3.1.11"
+  },
+  "build": {
+    "appId": "com.sylvainmontagny.myiotplatform",
+    "productName": "MyIoTPlatform",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/**/*",
+      "node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": ["nsis"],
+      "icon": "public/favicon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "public/icon.icns",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "public/icon.png",
+      "category": "Development"
+    }
+  }
+}
