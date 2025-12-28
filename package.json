@@ -1,5 +1,5 @@
 {
-  "name": "myiotplatform",
+  "name": "chirpstack-device-manager",
   "version": "1.0.0",
   "main": "elec.js",
   "scripts": {
@@ -29,8 +29,8 @@
     "nodemon": "^3.1.11"
   },
   "build": {
-    "appId": "com.sylvainmontagny.myiotplatform",
-    "productName": "MyIoTPlatform",
+    "appId": "com.sylvainmontagny.chirpstackdevicemanager",
+    "productName": "Chirpstack Device Manager",
     "directories": {
       "output": "dist"
     },

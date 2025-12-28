@@ -131,8 +131,7 @@ build
 .yarn/install-state.gz
 .pnp.*
 
-#csv files
-*.csv
 
-# Credentials file
+# personal files
 credentials.json
+import-sample-usmb.csv
