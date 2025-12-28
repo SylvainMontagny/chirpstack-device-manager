@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { app, dialog, shell } = require('electron');
 const axios = require('axios');
+const { start } = require('repl');
 
 
 
@@ -33,7 +34,7 @@ function loadCredentials() {
     }
 }
 
-async function checkForUpdates() {
+async function checkForUpdates(startupCheck) {
   const currentVersion = app.getVersion();
 
   try {
@@ -62,11 +63,13 @@ async function checkForUpdates() {
         await shell.openExternal(response.data.html_url);
       }
     } else {
+      if(!startupCheck) {
       await dialog.showMessageBox({
         type: 'info',
         message: 'You are up to date',
         detail: `Version ${currentVersion}`
       });
+    }
     }
 
   } catch (err) {

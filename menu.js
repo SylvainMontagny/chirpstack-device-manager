@@ -54,7 +54,7 @@ const menu = [
       {
         label: 'Check for updates…',
         click: () => {
-          checkForUpdates();
+          checkForUpdates(false);
         }
       }
     ]

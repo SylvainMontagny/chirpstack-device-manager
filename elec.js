@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
 const  startServer  = require('./app.js');
 const menu = require('./menu.js');
+const { checkForUpdates } = require('./utils/utils.js');
 
 let mainWindow;
 const PORT = 3000;
@@ -31,6 +32,10 @@ function createWindow() {
 
 app.on('ready', () => {
   startServer();
-  setTimeout(() => createWindow(), 1000);
+  setTimeout(() => {
+    createWindow();
+    checkForUpdates(true);
+  }
+  , 1000);
 });
 
