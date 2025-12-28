@@ -1,4 +1,4 @@
 name;dev_eui;join_eui;app_key;profile_id;tag_site;tag_building;tag_room
-device-1;383331916D328014;31200323ec610700;1e9be71a2c0336716360a47621de28db;set-your-profile-id-here;bourget;8D;120
-device-2;363639327232620F;31200331ec610701;d683df7964933aaffdf42aab4ca158bd;set-your-profile-id-here;bourget;8D;120
-device-3;393739316032750b;31203321ec610702;e8bc46374a398ffeeb3f31d5362760c9;set-your-profile-id-here;bourget;8D;121
+device-1;383331916D328014;31200323ec610700;1e9be71a2c0336716360a47621de28db;set-your-device-profile-id-here;bourget;8D;120
+device-2;363639327232620F;31200331ec610701;d683df7964933aaffdf42aab4ca158bd;set-your-device-profile-id-here;bourget;8D;120
+device-3;393739316032750b;31203321ec610702;e8bc46374a398ffeeb3f31d5362760c9;set-your-device-profile-id-here;bourget;8D;121

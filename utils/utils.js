@@ -1,5 +1,9 @@
 const path = require('path');
 const fs = require('fs');
+const { app, dialog, shell } = require('electron');
+const axios = require('axios');
+
+
 
 function getFilePath(filename) {
   if (!process.versions.electron) {
@@ -29,5 +33,53 @@ function loadCredentials() {
     }
 }
 
-//console.log(getFilePath('credentials.json'));
-module.exports = { getFilePath, loadCredentials };
+async function checkForUpdates() {
+  const currentVersion = app.getVersion();
+
+  try {
+    const response = await axios.get(
+      'https://api.github.com/repos/SylvainMontagny/chirpstack-device-manager/releases/latest',
+      {
+        headers: {
+          'User-Agent': 'Electron-App'
+        },
+        timeout: 5000
+      }
+    );
+
+    const latestVersion = response.data.tag_name.replace(/^v/, '');
+
+    if (latestVersion !== currentVersion) {
+      const result = await dialog.showMessageBox({
+        type: 'info',
+        buttons: ['Open releases page', 'Later'],
+        defaultId: 0,
+        message: 'New version available',
+        detail: `Current version: ${currentVersion}\nLatest version: ${latestVersion}`
+      });
+
+      if (result.response === 0) {
+        await shell.openExternal(response.data.html_url);
+      }
+    } else {
+      await dialog.showMessageBox({
+        type: 'info',
+        message: 'You are up to date',
+        detail: `Version ${currentVersion}`
+      });
+    }
+
+  } catch (err) {
+    await dialog.showMessageBox({
+      type: 'error',
+      message: 'Update check failed',
+      detail: err.response
+        ? `GitHub API error: ${err.response.status}`
+        : err.message
+    });
+  }
+}
+
+
+
+module.exports = { getFilePath, loadCredentials, checkForUpdates };

@@ -1,5 +1,6 @@
 
 const { shell, BrowserWindow, app } = require('electron');
+const { checkForUpdates } = require('./utils/utils.js');
 
 const menu = [
   {
@@ -34,19 +35,31 @@ const menu = [
     role: 'helpMenu',
     submenu: [
       {
-        label: 'Documentation (README)',
+        label: 'Documentation (Readme)',
         click: async () => {
-          await shell.openExternal('https://github.com/SylvainMontagny/iot-platform-webApp/blob/main/README.md');
+          await shell.openExternal(
+            'https://github.com/SylvainMontagny/chirpstack-device-manager/blob/main/Readme.md'
+          );
         }
       },
       {
-        label: 'Csv Import Template',
+        label: 'CSV Import Template',
         click: async () => {
-          await shell.openExternal('https://github.com/SylvainMontagny/iot-platform-webApp/blob/main/template.csv');
+          await shell.openExternal(
+            'https://github.com/SylvainMontagny/chirpstack-device-manager/blob/main/import-sample.csv'
+          );
+        }
+      },
+      { type: 'separator' },
+      {
+        label: 'Check for updates…',
+        click: () => {
+          checkForUpdates();
         }
       }
     ]
   }
+
 ];
 
 module.exports = menu;
