@@ -33,15 +33,15 @@
       </div>
       <ul class="nav-links">
         <li class="nav-section">
-          <span class="nav-section-title">Provisioning</span>
+          <span class="nav-section-title">Manage devices</span>
           <ul class="submenu">
-            <li><a href="#list-device">List devices</a></li>
-            <li><a href="#add-device">Import devices</a></li>
-            <li><a href="#delete-device">Delete devices</a></li>
+            <li><a href="#list-device">List / Delete</a></li>
+            <li><a href="#add-device">Import</a></li>
+            <!--<li><a href="#delete-device">Delete devices</a></li> -->
           </ul>
         </li>
         <li class="nav-section">
-          <span class="nav-section-title">Control</span>
+          <span class="nav-section-title">Control devices</span>
           <ul class="submenu">
             <li><a href="#micropelt-mlr003">Micropelt-mlr003</a></li>
             <!-- li><a href="#dragino-lht65">Dragino-lht65</a></li>    -->
@@ -191,7 +191,7 @@
                 <input type="text" id="device-search-input" placeholder="Search devices..." />
               </div>
               <div class="buttons">
-                <button class="refresh-button" title="Refresh devices">
+                <button class="refresh-button" title="Refresh devices" style="display: none;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M23 4v6h-6"></path>
@@ -202,7 +202,7 @@
                 </button>
                 <button id="send-confirmed-action-btn" class="send-button" type="button"
                   title="Send action to selected devices"> Send </button>
-                <button id="delete-device-btn" class="delete-button" style="display: none;" type="button"
+                <button id="delete-device-btn" class="delete-button"  type="button"
                   title="Delete selected devices"> Delete </button>
               </div>
             </div>

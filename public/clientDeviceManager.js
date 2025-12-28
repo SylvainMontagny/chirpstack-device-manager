@@ -110,7 +110,7 @@ document
         document.querySelectorAll(".page-sections > section").forEach(section => section.style.display = "none");
         document.querySelector(".device-section").style.display = "block";
         document.querySelector("#send-confirmed-action-btn").style.display = "none";
-        document.querySelector("#delete-device-btn").style.display = "none";
+        document.querySelector("#delete-device-btn").style.display = "block";
         listDevices(e);
     });
 
@@ -125,7 +125,7 @@ document
         document.querySelector(".add-device-from-csv-section").style.display = "block";
     });
 
-document
+/* document
     .querySelector('a[href="#delete-device"]')
     .addEventListener("click", (e) => {
         e.preventDefault();
@@ -135,7 +135,7 @@ document
         document.querySelector("#send-confirmed-action-btn").style.display = "none";
         document.querySelector("#delete-device-btn").style.display = "block";
         listDevices(e);
-    });
+    }); */
 
 document
     .querySelector('a[href="#micropelt-mlr003"]')
