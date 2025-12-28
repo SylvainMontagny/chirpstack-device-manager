@@ -12,7 +12,12 @@
   <div class="container">
     <nav class="sidebar">
       <div class="logo">
-        <h2>ChiprStack IoT Manager</h2>
+        <h2>Device Manager</h2>
+        <div class="nav-links nav-settings">
+          <li class="nav-settings-section">
+            <a href="#settings" class="active">Connection Settings</a>
+          </li>
+        </div>
         <div class="tenant-select">
           <span class="tenant-select-title">Tenant</span>
           <select name="tenant" id="tenant">
@@ -26,11 +31,7 @@
           </select>
         </div>
       </div>
-      <div class="nav-links nav-settings">
-        <li class="nav-settings-section">
-          <a href="#settings" class="active">Settings</a>
-        </li>
-      </div>
+
       <ul class="nav-links">
         <li class="nav-section">
           <span class="nav-section-title">Manage devices</span>
@@ -52,12 +53,12 @@
     </nav>
     <main class="main-content">
       <div class="content">
-        <h1>Settings</h1>
+        <h1>Connection Settings</h1>
         <div class="page-sections">
 
           <!-- Settings Section -->
           <section class="settings-section">
-            <h2>Settings</h2>
+            <h2 style="display: none;">Enter Connection Settings </h2>
             <form class="settings-form">
               <div class="form-row">
                 <div class="form-group">
@@ -88,16 +89,17 @@
                 </div>
               </div>
               <div class="form-row">
-              <div class="form-group">
+                <div class="form-group">
                   <label for="api-key">API Key</label>
                   <!--input type="password" id="api-key" name="api-key" placeholder="API Key"
                     value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImUwMWJjMWUzLWMzMTYtNDE5NC1hZTM5LWRlY2FiNzBlZTMxNCIsInR5cCI6ImtleSJ9.sq8Br0UTEdw8b5UFYeOr_BbYswt72mva0HsvNAU3jAA" /-->
-                     <input type="password" id="api-key" name="api-key" placeholder="API Key"/>
+                  <input type="password" id="api-key" name="api-key" placeholder="API Key" />
                 </div>
               </div>
 
               <div class="buttons-container">
-                <button type="submit" class="save-button" id="test-connection" style="display: none;">Test connection</button>
+                <button type="submit" class="save-button" id="test-connection" style="display: none;">Test
+                  connection</button>
                 <button type="submit" class="save-button" id="save-credentials">Save & Test Connection</button>
               </div>
               <div class="settings-message" style="margin-left: 1rem"></div>
@@ -186,7 +188,7 @@
           <!-- Device Section -->
           <section class="device-section" style="display: none;">
             <div class="device-header">
-              <h2>Devices</h2>
+              <h2 style="display: none;">Devices</h2>
               <div class="device-search">
                 <input type="text" id="device-search-input" placeholder="Search devices..." />
               </div>
@@ -202,8 +204,8 @@
                 </button>
                 <button id="send-confirmed-action-btn" class="send-button" type="button"
                   title="Send action to selected devices"> Send </button>
-                <button id="delete-device-btn" class="delete-button"  type="button"
-                  title="Delete selected devices"> Delete </button>
+                <button id="delete-device-btn" class="delete-button" type="button" title="Delete selected devices">
+                  Delete </button>
               </div>
             </div>
             <div class="table-container">

@@ -106,7 +106,7 @@ document
     .querySelector('a[href="#list-device"]')
     .addEventListener("click", async (e) => {
         e.preventDefault();
-        document.querySelector(".content h1").textContent = "List Devices";
+        document.querySelector(".content h1").textContent = "List / Delete devices";
         document.querySelectorAll(".page-sections > section").forEach(section => section.style.display = "none");
         document.querySelector(".device-section").style.display = "block";
         document.querySelector("#send-confirmed-action-btn").style.display = "none";
@@ -119,7 +119,7 @@ document
     .querySelector('a[href="#add-device"]')
     .addEventListener("click", (e) => {
         e.preventDefault();
-        document.querySelector(".content h1").textContent = "Add/Import Devices";
+        document.querySelector(".content h1").textContent = "Import devices";
         document.querySelectorAll(".page-sections > section").forEach(section => section.style.display = "none");
         //document.querySelector(".add-device-section").style.display = "block";
         document.querySelector(".add-device-from-csv-section").style.display = "block";
