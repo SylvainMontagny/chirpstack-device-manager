@@ -1,14 +1,14 @@
 //////////////////////////////////////////////   Functions  //////////////////////////////////////////
 
 async function listDevices(e) {
-
     //////////////// Application is hardcoded for testing ////////////////
     //const applicationId = "4dad5b91-5f77-4219-a7a4-20d08fa46f1d"; //document.querySelector("#application").value;
     const applicationId = document.querySelector("#application").value;
-  
+
+    console.log("[Client] List devices REQ");
     try {
         const response = await axios.get("/api/list-devices", { params: { applicationId: applicationId } });
-        console.log("[Client] Response from Server :", response.data);
+        console.log("[Client] List devices RESP :", response.data.deviceList.map(device => device.name));
 
         if (response.data.deviceList.length != 0) {
             document.querySelector(".devices-table tbody").innerHTML = "";
@@ -40,7 +40,7 @@ async function listDevices(e) {
         }
     }
     catch (err) {
-        console.error(err);
+        console.error(err.response.data.message);
     }
 }
 
@@ -52,7 +52,6 @@ function selectedDevice(selectedDevEuis) {
         alert("Please select at least one device.");
         return [];
     }
-    console.log("[Client] Selected devices for action:", selectedDevEuis);
     return selectedDevEuis;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,11 +69,11 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 document
     .querySelector("#tenant")
     .addEventListener("change", async (e) => {
-        console.log("[Client] Tenant changed:", e.target.value);
+        console.log("[Client] Tenant change listener:", e.target.value);
         e.preventDefault();
         try {
             const response = await axios.get("/api/get-applications", { params: { tenantId: e.target.value } });
-            console.log("[Client] Applications response:", response.data);
+            console.log("[Client] Server RESP (list Applications):", response.data.applications.map(app => app.name));
             const applicationSelect = document.querySelector("#application");
             applicationSelect.innerHTML = "";
             const option = document.createElement("option");
@@ -98,7 +97,7 @@ document
 document.
     querySelector('#application')
     .addEventListener('change', async (e) => {
-        console.log("[Client] Application changed:", e.target.value);
+        console.log("[Client] Application change listener:", e.target.value);
         await listDevices(e);
     });
 
@@ -125,17 +124,6 @@ document
         document.querySelector(".add-device-from-csv-section").style.display = "block";
     });
 
-/* document
-    .querySelector('a[href="#delete-device"]')
-    .addEventListener("click", (e) => {
-        e.preventDefault();
-        document.querySelector(".content h1").textContent = "Delete Devices";
-        document.querySelectorAll(".page-sections > section").forEach(section => section.style.display = "none");
-        document.querySelector(".device-section").style.display = "block";
-        document.querySelector("#send-confirmed-action-btn").style.display = "none";
-        document.querySelector("#delete-device-btn").style.display = "block";
-        listDevices(e);
-    }); */
 
 document
     .querySelector('a[href="#micropelt-mlr003"]')
@@ -237,18 +225,22 @@ document
     .addEventListener("click", async (e) => {
         e.preventDefault();
         const selectedDevEuis = selectedDevice([]);
-        if (selectedDevEuis.length === 0) {
-            return;
+
+        try {
+            if (selectedDevEuis.length === 0) {
+                return;
+            }
+            if (!confirm("Selected device will be deleted. Are you sure?")) {
+                return;
+            }
+            console.log("[Client] Delete devices REQ:", selectedDevEuis);
+            const response = await axios.post("/api/delete-devices", selectedDevEuis);
+            console.log("[Client] Delete devices RESP :", response.data.message);
+            await listDevices(e);
         }
-        if (!confirm("Selected device will be deleted. Are you sure?")) {
-            return;
-        }
-        const response = await axios.post("/api/delete-devices", selectedDevEuis);
-        console.log("[Client] Response from Server :", response.data);
-        if (response.data.status !== "success") {
+        catch (err) {
             alert("Failed to delete device(s).");
         }
-        await listDevices(e);
     });
 
 
@@ -265,10 +257,8 @@ document
             }
 
             const csvString = await file.text();
-
             const response = await axios.post("/api/adddevicefromcsv", {
                 csvString: csvString,
-                ////////////////// Application is hardcoded for testing //////////////////
                 applicationId: document.querySelector("#application").value
                 //applicationId: "4dad5b91-5f77-4219-a7a4-20d08fa46f1d"
             });
@@ -281,8 +271,8 @@ document
                 alert("Error: " + (response.data.message || "Unable to add device"));
             }
         } catch (error) {
-            console.error("[Client] Error adding device:", error.message);
-            alert("Error adding device: " + error.message);
+            console.error("[Client] Error adding device:", error.response.data.message || error.message);
+            alert("Error adding device: " + (error.response.data.message || error.message));
         }
     });
 

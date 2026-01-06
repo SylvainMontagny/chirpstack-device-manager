@@ -27,27 +27,29 @@ document
             tenantId: document.querySelector("#tenant-id").value
         };
 
-        console.log("[Client] Credentials to save:", credentials);
+        
+
+        console.log("[Client] Credentials to save REQ :", credentials);
 
         try {
             const response = await axios.post("/api/credentials", credentials);
-            console.log("[Client] Server response:", response.data);
+            console.log("[Client] Credentials to save RESP :", response.data);
             messageAlert.textContent = response.data.message;
             messageAlert.style.color = "green";
 
         } catch (err) {
             console.error(err);
-            messageAlert.textContent = "Failed to save credentials";
+            messageAlert.textContent = "[Client] Failed to save credentials";
             messageAlert.style.color = "red";
         }
 
-           console.log("[Client] Testing connection...");
+           console.log("[Client] Test connection REQ");
 
         try {
             const response = await axios.get("/api/test-connection");
             messageAlert.textContent = "Connection successful";
             messageAlert.style.color = "green";
-            console.log("[Client] Server response:", response.data);
+            console.log("[Client] Test connection RESP (list Tenants) :", response.data.info.tenants.map(tenant => tenant.name));
             const tenantSelect = document.querySelector("#tenant");
             tenantSelect.innerHTML = "";
             const option = document.createElement("option");
@@ -80,7 +82,7 @@ document
 
     });
 
-
+/* 
 document
     .querySelector("#test-connection")
     .addEventListener("click", async (e) => {
@@ -122,7 +124,7 @@ document
             messageAlert.style.color = "red";
         }
     });
-
+ */
 
 document
     .querySelector('a[href="#settings"]')
@@ -137,7 +139,7 @@ document
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await axios.get("/api/credentials");
-        console.log("[Client] Saved credentials fetched on Server:", response.data);
+        console.log("[Client] Credentials fetched on startup:", response.data);
         document.querySelector("#network-server").value = response.data.networkServer;
         document.querySelector("#api-key").value = response.data.apiKey;
         document.querySelector("#network-server-port").value = response.data.networkServerPort;

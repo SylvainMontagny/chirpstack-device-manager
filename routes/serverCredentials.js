@@ -1,28 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-//const path = require("path");
 const apiGrpcChirpstack = require("../services/apiGrpcChirpstack");
 const { getFilePath } = require('../utils/utils.js');
 
 console.log("[Server] /routes/credentials routes loaded");
 
-// Not used yet but will be when loading settings page.
-router.get("/credentials", (req, res) => {
-  console.log("[Server] GET /api/credentials called");
 
+router.get("/credentials", (req, res) => {
   fs.readFile(getFilePath('credentials.json'), "utf8", (err, data) => {
     if (err) {
-      console.error("Error reading credentials:", err);
+      console.error("[Server] Error reading credentials:", err);
       return;
     }
 
     const credentials = JSON.parse(data);
-    console.log("Credentials from credentials.json :", credentials);
+
+    console.log("[Server] Credentials fetched on startup :", credentials);
     res.json(credentials);
   });
 });
- 
+
 // When "Save Credentials" button is clicked
 router.post("/credentials", (req, res) => {
   console.log("[Server] POST /api/credentials");
@@ -44,25 +42,25 @@ router.get("/test-connection", async (req, res) => {
   console.log("[Server] GET /api/test-connection");
   const info = {}
   try {
-    console.log("[Server] Fetching tenant(s) ...");
+    //console.log("[Server] Fetching tenant(s) ...");
     info.tenants = await apiGrpcChirpstack.listTenants();
-    console.log("[Server] Tenants info:", info);
+    console.log("[Server] Connection to ChirpStack successful");
+    console.log("[Server] List Tenants :", info.tenants.map(tenant => tenant.name));
+    res.json({ status: "success", message: "Connection successful", info });
   } catch (err) {
-    console.error("[Server] Connection test failed:", err);
+    console.error("[Server] Connection to chirpstack failed:", err);
     res.status(500).json({ status: "error", message: "Connection failed" });
   }
-  console.log("[Server] Connection to ChirpStack successful");
-  res.json({ status: "success", message: "Connection successful", info });
 });
 
 // When tenant is selected, fetch applications for that tenant
 router.get("/get-applications", async (req, res) => {
   console.log("[Server] GET /api/get-applications");
   const tenantId = req.query.tenantId;
-  console.log("[Server] Tenant ID:", tenantId);
+  //console.log("[Server]  Tenant ID :", tenantId);
   try {
     const applications = await apiGrpcChirpstack.listApplications(tenantId);
-    console.log("[Server] Applications fetched:", applications);
+    console.log("[Server] List Applications :", applications.map(app => app.name));
     res.json({ status: "success", applications });
   } catch (err) {
     console.error("[Server] Fetching applications failed:", err);

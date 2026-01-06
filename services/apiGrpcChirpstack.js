@@ -110,22 +110,18 @@ async function listAllDevices(applicationId) {
     req.setApplicationId(applicationId);
     req.setLimit(1000);
     let devEuis = [];
-    try {
-        const resp = await new Promise((resolve, reject) => {
-            deviceService.list(req, metadata, (err, resp) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(resp);
-            });
+
+    const resp = await new Promise((resolve, reject) => {
+        deviceService.list(req, metadata, (err, resp) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(resp);
         });
-        devEuis = resp.getResultList().map(device => device.getDevEui());
-    }
-    catch (err) {
-        console.error("[Server - GRPC] Error listing devices:", err);
-    }
-    console.log("[Server - GRPC] Devices:", devEuis);
+    });
+    devEuis = resp.getResultList().map(device => device.getDevEui());
+
     return devEuis;
 }
 
@@ -335,7 +331,7 @@ async function deleteDevice(devEui) {
         });
 
     });
-    console.log(response);
+    // console.log(response);
 }
 
 async function deleteDeviceFromDevEuis(devEuis) {
@@ -366,7 +362,7 @@ async function getTenantDetails(tenantId) {
 
 async function listAllDevicesWithDetails(applicationId) {
     const devEuis = await listAllDevices(applicationId);
-    console.log(devEuis);
+    //console.log(devEuis);
     const allDevicesDetails = [];
     for (let i = 0; i < devEuis.length; i++) {
         const details = await getDeviceDetails(devEuis[i]);
@@ -375,6 +371,8 @@ async function listAllDevicesWithDetails(applicationId) {
     // console.log(allDevicesDetails);
     return allDevicesDetails;
 }
+
+
 
 module.exports = {
     listAllDevices,
