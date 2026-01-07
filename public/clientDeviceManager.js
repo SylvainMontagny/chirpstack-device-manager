@@ -98,7 +98,7 @@ document.
     querySelector('#application')
     .addEventListener('change', async (e) => {
         console.log("[Client] Application change listener:", e.target.value);
-        await listDevices(e);
+        document.querySelector('a[href="#list-device"]').click();
     });
 
 document
