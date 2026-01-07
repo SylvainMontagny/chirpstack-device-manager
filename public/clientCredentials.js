@@ -1,11 +1,65 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////   Functions  //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function isValidUuid(uuid) {
+    if (!uuid || typeof uuid !== 'string') {
+        return false;
+    }
+    // Check that it's a valid UUID
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+    if (!uuidRegex.test(uuid)) {
+        return false;
+    }
+    return true;
+}
+
+function looksLikeJWT(token) {
+    return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(token);
+}
+
+
+function testCredentials() {
+    if (isNaN(document.querySelector("#network-server-port").value) || document.querySelector("#network-server-port").value <= 0 || document.querySelector("#network-server-port").value > 65535) {
+        document.querySelector(".portValidation-message").textContent = "Invalid Port";
+        document.querySelector(".portValidation-message").style.display = "block";
+        document.querySelector(".portValidation-message").style.color = "red";
+    }
+    else if(document.querySelector("#tenant-key-checkbox").checked && !isValidUuid(document.querySelector("#tenant-id").value)) {
+        document.querySelector(".uuidValidation-message").textContent = "Invalid UUID";
+        document.querySelector(".uuidValidation-message").style.display = "block";
+        document.querySelector(".uuidValidation-message").style.color = "red";
+    }
+    else if (document.querySelector("#api-key").value.trim() === "") {
+        document.querySelector(".apiKeyValidation-message").textContent = "API Key cannot be empty";
+        document.querySelector(".apiKeyValidation-message").style.display = "block";
+        document.querySelector(".apiKeyValidation-message").style.color = "red";
+    }
+    else if (!looksLikeJWT(document.querySelector("#api-key").value.trim())) {
+        document.querySelector(".apiKeyValidation-message").textContent = "API Key does not look like a valid JWT";
+        document.querySelector(".apiKeyValidation-message").style.display = "block";
+        document.querySelector(".apiKeyValidation-message").style.color = "red";
+    }
+    else {
+        document.querySelector(".uuidValidation-message").style.display = "none";
+        document.querySelector(".portValidation-message").style.display = "none";
+        document.querySelector(".apiKeyValidation-message").style.display = "none";
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////      EventListeners      ////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
 document
     .querySelector("#tenant-key-checkbox")
     .addEventListener("change", (e) => {
-        if (e.target.checked){
+        if (e.target.checked) {
             console.log("Tenant API key will be used");
             document.querySelector("#tenant-id-label").style.display = "block";
             document.querySelector("#tenant-id").style.display = "block";
-        }else{
+        } else {
             console.log("Admin API key will be used");
             document.querySelector("#tenant-id-label").style.display = "none";
             document.querySelector("#tenant-id").style.display = "none";
@@ -17,6 +71,7 @@ document
     .querySelector("#save-credentials")
     .addEventListener("click", async (e) => {
         e.preventDefault();
+        testCredentials();
         const messageAlert = document.querySelector(".settings-message");
 
         const credentials = {
@@ -26,8 +81,6 @@ document
             isTenantApiKey: document.querySelector("#tenant-key-checkbox").checked,
             tenantId: document.querySelector("#tenant-id").value
         };
-
-        
 
         console.log("[Client] Credentials to save REQ :", credentials);
 
@@ -43,7 +96,7 @@ document
             messageAlert.style.color = "red";
         }
 
-           console.log("[Client] Test connection REQ");
+        console.log("[Client] Test connection REQ");
 
         try {
             const response = await axios.get("/api/test-connection");
@@ -55,9 +108,9 @@ document
             const option = document.createElement("option");
             option.text = "Select a tenant...";
             option.disabled = true;
-            if( response.data.info.tenants.length === 1){
+            if (response.data.info.tenants.length === 1) {
                 option.selected = false;
-            }else{
+            } else {
                 option.selected = true;
             }
             tenantSelect.appendChild(option);
@@ -70,8 +123,8 @@ document
             });
 
             // Case Tenant API Key with only one tenant
-            if( response.data.info.tenants.length === 1){
-                 document.querySelector("#tenant").dispatchEvent(new Event("change"));
+            if (response.data.info.tenants.length === 1) {
+                document.querySelector("#tenant").dispatchEvent(new Event("change"));
             }
         }
         catch (err) {
@@ -81,50 +134,6 @@ document
         }
 
     });
-
-/* 
-document
-    .querySelector("#test-connection")
-    .addEventListener("click", async (e) => {
-        e.preventDefault();
-        console.log("[Client] Testing connection...");
-        const messageAlert = document.querySelector(".settings-message");
-        try {
-            const response = await axios.get("/api/test-connection");
-            messageAlert.textContent = "Connection successful";
-            messageAlert.style.color = "green";
-            console.log("[Client] Server response:", response.data);
-            const tenantSelect = document.querySelector("#tenant");
-            tenantSelect.innerHTML = "";
-            const option = document.createElement("option");
-            option.text = "Select a tenant...";
-            option.disabled = true;
-            if( response.data.info.tenants.length === 1){
-                option.selected = false;
-            }else{
-                option.selected = true;
-            }
-            tenantSelect.appendChild(option);
-
-            response.data.info.tenants.forEach(tenant => {
-                const option = document.createElement("option");
-                option.value = tenant.id;
-                option.text = tenant.name;
-                tenantSelect.appendChild(option);
-            });
-
-            // Case Tenant API Key with only one tenant
-            if( response.data.info.tenants.length === 1){
-                 document.querySelector("#tenant").dispatchEvent(new Event("change"));
-            }
-        }
-        catch (err) {
-            console.error(err);
-            messageAlert.textContent = "Connection failed";
-            messageAlert.style.color = "red";
-        }
-    });
- */
 
 document
     .querySelector('a[href="#settings"]')
@@ -137,6 +146,7 @@ document
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+
     try {
         const response = await axios.get("/api/credentials");
         console.log("[Client] Credentials fetched on startup:", response.data);
@@ -144,15 +154,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#api-key").value = response.data.apiKey;
         document.querySelector("#network-server-port").value = response.data.networkServerPort;
         document.querySelector("#tenant-key-checkbox").checked = response.data.isTenantApiKey;
-        if (response.data.isTenantApiKey){
+        if (response.data.isTenantApiKey) {
             document.querySelector("#tenant-id-label").style.display = "block";
             document.querySelector("#tenant-id").style.display = "block";
             document.querySelector("#tenant-id").value = response.data.tenantId;
-        }else{
+        } else {
             document.querySelector("#tenant-id-label").style.display = "none";
-            document.querySelector("#tenant-id").style.display = "none";   
-        } 
+            document.querySelector("#tenant-id").style.display = "none";
+
+        }
+
     } catch (err) {
-        console.error("Erreur lors de la récupération des credentials :", err);
+        console.error("Error when fetching credentials:", err);
     }
 });

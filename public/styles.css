@@ -600,3 +600,30 @@ h2 {
   font-size: 1rem;
   margin-left: 1rem;
 }
+
+.portValidation-message {
+  display: inline-block;
+  vertical-align: middle;
+  color: #2ecc40;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+
+.uuidValidation-message {
+  display: inline-block;
+  vertical-align: middle;
+  color: #2ecc40;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+
+.apiKeyValidation-message {
+  display: inline-block;
+  vertical-align: middle;
+  color: #2ecc40;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
