@@ -102,6 +102,7 @@ document
             const response = await axios.get("/api/test-connection");
             messageAlert.textContent = "Connection successful";
             messageAlert.style.color = "green";
+            document.querySelector("#connexion-status").textContent = "✅";
             console.log("[Client] Test connection RESP (list Tenants) :", response.data.info.tenants.map(tenant => tenant.name));
             const tenantSelect = document.querySelector("#tenant");
             tenantSelect.innerHTML = "";
@@ -131,6 +132,7 @@ document
             console.error(err);
             messageAlert.textContent = "Connection failed";
             messageAlert.style.color = "red";
+            document.querySelector("#connexion-status").textContent = "❌";
         }
 
     });

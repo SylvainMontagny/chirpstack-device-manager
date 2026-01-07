@@ -13,11 +13,18 @@
     <nav class="sidebar">
       <div class="logo">
         <h2>Device Manager</h2>
+
         <div class="nav-links nav-settings">
           <li class="nav-settings-section">
-            <a href="#settings" class="active">Connection Settings</a>
+            <a href="#settings" class="active nav-settings-link">
+              <span class="label">Connection Settings</span>
+              <span class="status" id="connexion-status">❌</span>
+            </a>
           </li>
         </div>
+
+
+
         <div class="tenant-select">
           <span class="tenant-select-title">Tenant</span>
           <select name="tenant" id="tenant">
@@ -158,7 +165,7 @@
                 <div class="form-group">
                   <div class="drop-zone" id="drop-zone">
                     <input type="file" id="csv-file" name="csv" accept=".csv" class="file-input" />
-                    <div class="drop-zone-text">
+                    <div class="drop-zone-text" id="drop-zone-file-name">
                       Drag and drop your CSV file here<br>
                       or click to select a file
                     </div>

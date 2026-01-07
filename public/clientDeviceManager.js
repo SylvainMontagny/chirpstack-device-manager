@@ -145,6 +145,14 @@ document
 /////////////////////////////////////////  EventListeners Sections ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 document
+    .querySelector('.file-input')
+    .addEventListener('change', (e) => {
+        const fileName = e.target.files[0]?.name;
+        document.querySelector('#drop-zone-file-name').textContent =
+            fileName ? `File uploaded ✅: ${fileName}` : 'Drag and drop your CSV file here or click to select a file';
+    });
+
+document
     .querySelector('#action-type-select')
     .addEventListener("change", (e) => {
         console.log("[Client] Action changed:", e.target.value);
