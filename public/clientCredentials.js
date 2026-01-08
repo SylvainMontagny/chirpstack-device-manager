@@ -87,7 +87,7 @@ document
         try {
             const response = await axios.post("/api/credentials", credentials);
             console.log("[Client] Credentials to save RESP :", response.data);
-            messageAlert.textContent = response.data.message;
+            messageAlert.textContent = "Wait for ChirpStack connection...";
             messageAlert.style.color = "green";
 
         } catch (err) {
@@ -129,8 +129,9 @@ document
             }
         }
         catch (err) {
-            console.error(err);
-            messageAlert.textContent = "Connection failed";
+            const { status, code, message } = err.response.data;
+            console.error(`[Client] Test connection error Status : ${status}, Code : ${code}, Message :${message}`);
+            messageAlert.textContent = "Connection failed : " + code;
             messageAlert.style.color = "red";
             document.querySelector("#connexion-status").textContent = "❌";
         }
