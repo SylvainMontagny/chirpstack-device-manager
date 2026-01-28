@@ -25,8 +25,8 @@ router.get("/credentials", (req, res) => {
 // When "Save Credentials" button is clicked
 router.post("/credentials", (req, res) => {
   console.log("[Server] POST /api/credentials");
-  const { networkServer, apiKey, networkServerPort, isTenantApiKey, tenantId } = req.body;
-  const credentials = { networkServer, apiKey, networkServerPort, isTenantApiKey, tenantId };
+  const { networkServer, apiKey, networkServerPort, isTenantApiKey, tenantId, securedConnection } = req.body;
+  const credentials = { networkServer, apiKey, networkServerPort, isTenantApiKey, tenantId, securedConnection };
 
   fs.writeFile(getFilePath('credentials.json'), JSON.stringify(credentials, null, 2), (err) => {
     if (err) {
@@ -56,27 +56,32 @@ router.get("/test-connection", async (req, res) => {
     let code = "INTERNAL_ERROR";
 
     switch (err.code) {
-      case grpc.status.UNAUTHENTICATED: // 16
+      case grpc.status.UNAUTHENTICATED:
         status = 401;
         code = "INVALID_CREDENTIALS";
         break;
 
-      case grpc.status.PERMISSION_DENIED: // 7
+      case grpc.status.PERMISSION_DENIED:
         status = 403;
         code = "FORBIDDEN";
         break;
 
-      case grpc.status.UNAVAILABLE: // 14
+      case grpc.status.UNAVAILABLE:
         status = 502;
         code = "CHIRPSTACK_UNREACHABLE";
         break;
 
-      case grpc.status.DEADLINE_EXCEEDED: // 4
+      case grpc.status.DEADLINE_EXCEEDED:
         status = 504;
         code = "TIMEOUT";
         break;
+
+      case grpc.status.UNIMPLEMENTED:
+        status = 404;
+        code = "GRPC UNIMPLEMENTED";
+        break;
     }
-    console.log("[Server] Responding with status:", status, "code:", code);
+    console.log("[Server] Responding with status:", status, "code:", code, "message:", err.message);
     res.status(status).json({
       status: status,
       code,

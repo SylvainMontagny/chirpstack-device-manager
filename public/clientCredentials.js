@@ -79,7 +79,8 @@ document
             apiKey: document.querySelector("#api-key").value,
             networkServerPort: document.querySelector("#network-server-port").value,
             isTenantApiKey: document.querySelector("#tenant-key-checkbox").checked,
-            tenantId: document.querySelector("#tenant-id").value
+            tenantId: document.querySelector("#tenant-id").value,
+            securedConnection: document.querySelector("#secured-connection-checkbox").checked
         };
 
         console.log("[Client] Credentials to save REQ :", credentials);
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#api-key").value = response.data.apiKey;
         document.querySelector("#network-server-port").value = response.data.networkServerPort;
         document.querySelector("#tenant-key-checkbox").checked = response.data.isTenantApiKey;
+        document.querySelector("#secured-connection-checkbox").checked = response.data.securedConnection || false;
         if (response.data.isTenantApiKey) {
             document.querySelector("#tenant-id-label").style.display = "block";
             document.querySelector("#tenant-id").style.display = "block";

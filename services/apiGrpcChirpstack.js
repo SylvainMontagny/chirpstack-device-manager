@@ -17,6 +17,14 @@ const { loadCredentials } = require('../utils/utils.js');
 // >> /api/device_pb.js
 // Create the client for the DeviceService. Le constructeur DeviceServiceClient est définie dans api/device_grpc_pb.js de la doc https://www.npmjs.com/package/@chirpstack/chirpstack-api?activeTab=code
 
+function getGrpcCredentials(securedConnection) {
+    if (securedConnection) {
+        return grpc.credentials.createSsl();
+    } else {
+        return grpc.credentials.createInsecure();
+    }
+}
+
 async function listApplications(tenantId) {
     let credentials = loadCredentials();
 
@@ -25,7 +33,7 @@ async function listApplications(tenantId) {
 
     const deviceServiceApplication = new deviceApplication_grpc.ApplicationServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     const req = new deviceApplication_pb.ListApplicationsRequest();
@@ -55,7 +63,7 @@ async function listTenants() {
 
     const deviceServiceTenant = new tenant_grpc.TenantServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     //console.log(credentials)
@@ -70,6 +78,7 @@ async function listTenants() {
             deviceServiceTenant.list(req, metadata, (err, resp) => {
                 if (err) {
                     reject(err);
+                    console.error("[Server - GRPC] Error listing tenants:", err);
                     return;
                 }
                 resolve(resp.getResultList().map((tenant) => ({ name: tenant.getName(), id: tenant.getId() })));
@@ -103,7 +112,7 @@ async function listAllDevices(applicationId) {
 
     const deviceService = new device_grpc.DeviceServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     const req = new device_pb.ListDevicesRequest();
@@ -134,7 +143,7 @@ async function getDeviceDetails(devEui) {
 
     const deviceService = new device_grpc.DeviceServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     const req = new device_pb.GetDeviceRequest();
@@ -177,7 +186,7 @@ async function sendDownlinkToDevice(devEui, payloadArray, fPort, confirmed = fal
 
     const deviceService = new device_grpc.DeviceServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     const itemToQueue = new device_pb.DeviceQueueItem();
@@ -254,7 +263,7 @@ async function addDevice(deviceInfo) {
 
     const deviceService = new device_grpc.DeviceServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
 
     const device = new device_pb.Device();
@@ -315,7 +324,7 @@ async function deleteDevice(devEui) {
 
     const deviceService = new device_grpc.DeviceServiceClient(
         credentials.networkServer + ":" + credentials.networkServerPort,
-        grpc.credentials.createInsecure(),
+        getGrpcCredentials(credentials.securedConnection),
     );
     const deleteReq = new device_pb.DeleteDeviceRequest();
     deleteReq.setDevEui(devEui);
