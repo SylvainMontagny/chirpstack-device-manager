@@ -233,6 +233,7 @@ h2 {
   border-radius: 4px;
   font-size: 0.9rem;
   background-color: white;
+  text-align: center;
 }
 .tags-container{
   padding-top: 2rem;
@@ -530,20 +531,14 @@ h2 {
   text-align: center;
 } 
 .checkbox {
-    background-color: white;
-    padding: 0.5rem;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
     height: auto;
+    margin-top: 0.5rem;
 }
 
 .checkbox:hover {
-    background-color: rgb(241, 239, 239);
 }
 
 .settings-form .form-group input[type="checkbox"] {
-    height: 100%;
-    width: 100%;
     margin-right: 0.5rem;
 }
 
