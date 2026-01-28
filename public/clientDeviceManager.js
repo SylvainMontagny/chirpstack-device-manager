@@ -178,6 +178,62 @@ document.querySelector("#select-all-devices").addEventListener("change", (e) => 
     });
 });
 
+document
+    .querySelector('#device-search-input')
+    .addEventListener("keyup", (e) => {
+        const searchValue = e.target.value.toLowerCase();
+        const tableRows = document.querySelectorAll(".device-row");
+        
+        tableRows.forEach(row => {
+            const deviceName = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+            if (deviceName.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+
+// Sorting functionality for table headers
+document.querySelectorAll(".sortable").forEach(header => {
+    header.addEventListener("click", (e) => {
+        const columnIndex = Array.from(header.parentElement.children).indexOf(header) + 1;
+        const table = document.querySelector(".devices-table");
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.querySelectorAll(".device-row"));
+
+        // Determine sort direction
+        const isAscending = header.classList.contains("asc");
+        
+        // Remove active sort class from all headers
+        document.querySelectorAll(".sortable").forEach(h => {
+            h.classList.remove("asc", "desc");
+        });
+
+        // Sort rows
+        rows.sort((a, b) => {
+            const aValue = a.querySelector(`td:nth-child(${columnIndex})`).textContent.trim().toLowerCase();
+            const bValue = b.querySelector(`td:nth-child(${columnIndex})`).textContent.trim().toLowerCase();
+
+            if (isAscending) {
+                return bValue.localeCompare(aValue);
+            } else {
+                return aValue.localeCompare(bValue);
+            }
+        });
+
+        // Re-append sorted rows
+        rows.forEach(row => tbody.appendChild(row));
+
+        // Add active sort class
+        if (isAscending) {
+            header.classList.add("desc");
+        } else {
+            header.classList.add("asc");
+        }
+    });
+});
+
 
 document
     .querySelector('#send-confirmed-action-btn')
