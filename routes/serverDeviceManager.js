@@ -129,15 +129,13 @@ router.post("/adddevicefromcsv", async (req, res) => {
         deviceInfo.profileId = validateUuid(device.profile_id);
         deviceInfo.applicationId = validateUuid(applicationId);
         deviceInfo.tags = {};
-        // Collect tags
-        if (device.tag_site) {
-            deviceInfo.tags.site = device.tag_site;
-        }
-        if (device.tag_building) {
-            deviceInfo.tags.building = device.tag_building;
-        }
-        if (device.tag_room) {
-            deviceInfo.tags.room = device.tag_room;
+        
+        // Collect all tags that start with "tag_"
+        for (const key in device) {
+            if (key.startsWith('tag_') && device[key]) {
+                const tagName = key.substring(4); // Remove "tag_" prefix
+                deviceInfo.tags[tagName] = device[key];
+            }
         }
 
         const response = await apiGrpcChirpstack.addDevice(deviceInfo);
